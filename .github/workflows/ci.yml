@@ -43,7 +43,7 @@ jobs:
       - name: Run Trivy vulnerability scanner
         uses: aquasecurity/trivy-action@v0.20.0
         with:
-          image-ref: your-username/cicd-lab
+          image-ref: ${{ secrets.DOCKERHUB_USERNAME }}/cicd
           severity: CRITICAL
           ignore-unfixed: true
           exit-code: 1
