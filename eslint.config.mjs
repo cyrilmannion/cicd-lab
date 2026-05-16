@@ -1,9 +1,25 @@
 import js from "@eslint/js";
-import globals from "globals";
-import pluginReact from "eslint-plugin-react";
-import { defineConfig } from "eslint/config";
 
-export default defineConfig([
-  { files: ["**/*.{js,mjs,cjs,jsx}"], plugins: { js }, extends: ["js/recommended"], languageOptions: { globals: globals.browser } },
-  pluginReact.configs.flat.recommended,
-]);
+export default [
+  js.configs.recommended,
+  {
+    languageOptions: {
+      globals: {
+        require: "readonly",
+        module: "readonly",
+        process: "readonly",
+        console: "readonly"
+      }
+    }
+  },
+  {
+    files: ["**/*.test.js"],
+    languageOptions: {
+      globals: {
+        describe: "readonly",
+        it: "readonly",
+        expect: "readonly"
+      }
+    }
+  }
+];
