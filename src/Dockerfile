@@ -1,13 +1,20 @@
-# Use a slim Node base image
-FROM node:20-alpine
+# Use Node base image
+FROM node:20
 
+# Set working directory
 WORKDIR /app
 
-# Install dependencies first (layer cache friendly)
+# Copy package files first
 COPY package*.json ./
-RUN npm ci --omit=dev
 
-COPY src/ ./src/
+# Install dependencies
+RUN npm ci
 
+# Copy the rest of the app
+COPY . .
+
+# Expose port (optional)
 EXPOSE 3000
+
+# Run the app
 CMD ["node", "src/app.js"]
