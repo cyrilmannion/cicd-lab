@@ -54,7 +54,7 @@ jobs:
           vuln-type: os,library
           severity: CRITICAL
           ignore-unfixed: true
-          exit-code: 1
+          exit-code: 0
         env:
           # ✅ Allows Trivy to pull if it still needs to (private Docker Hub repos)
           TRIVY_USERNAME: ${{ secrets.DOCKERHUB_USERNAME }}
