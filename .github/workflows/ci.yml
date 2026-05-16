@@ -38,12 +38,24 @@ jobs:
         uses: docker/build-push-action@v5
         with:
           push: true
-          tags: ${{ secrets.DOCKERHUB_USERNAME }}/cicd-lab:${{ github.sha }}
+          tags: |
+            ${{ secrets.DOCKERHUB_USERNAME }}/cicd-lab:${{ github.sha }}
+            ${{ secrets.DOCKERHUB_USERNAME }}/cicd-lab:latest
+
+      # ✅ Ensure the exact image tag exists locally for Trivy to inspect
+      - name: Pull image for Trivy scan
+        run: docker pull ${{ secrets.DOCKERHUB_USERNAME }}/cicd-lab:${{ github.sha }}
 
       - name: Run Trivy vulnerability scanner
         uses: aquasecurity/trivy-action@v0.20.0
         with:
-          image-ref: ${{ secrets.DOCKERHUB_USERNAME }}/cicd
+          image-ref: ${{ secrets.DOCKERHUB_USERNAME }}/cicd-lab:${{ github.sha }}
+          format: table
+          vuln-type: os,library
           severity: CRITICAL
           ignore-unfixed: true
           exit-code: 1
+        env:
+          # ✅ Allows Trivy to pull if it still needs to (private Docker Hub repos)
+          TRIVY_USERNAME: ${{ secrets.DOCKERHUB_USERNAME }}
+          TRIVY_PASSWORD: ${{ secrets.DOCKERHUB_TOKEN }}
