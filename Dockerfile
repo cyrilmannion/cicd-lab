@@ -1,3 +1,4 @@
+# User details for maintainer
 # Use Node base image
 FROM node:20
 
